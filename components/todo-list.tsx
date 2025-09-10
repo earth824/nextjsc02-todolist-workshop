@@ -1,30 +1,21 @@
+import { fetchLatestTodos } from '@/libs/data';
 import TodoItem from './todo-item';
 
 type TodoListProps = {
   excludeAction?: boolean;
+  limit?: number;
 };
 
-export default function TodoList({ excludeAction = false }: TodoListProps) {
+export default async function TodoList({
+  excludeAction = false,
+  limit
+}: TodoListProps) {
+  const todos = await fetchLatestTodos({ limit });
   return (
     <div>
-      <TodoItem
-        id="a"
-        title="test"
-        status="completed"
-        excludeAction={excludeAction}
-      />
-      <TodoItem
-        id="aa"
-        title="test1"
-        status="completed"
-        excludeAction={excludeAction}
-      />
-      <TodoItem
-        id="aaa"
-        title="test2"
-        status="pending"
-        excludeAction={excludeAction}
-      />
+      {todos.map(todo => (
+        <TodoItem key={todo.id} {...todo} excludeAction={excludeAction} />
+      ))}
     </div>
   );
 }

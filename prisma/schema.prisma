@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  completed
+  pending
+}
+
+model Todo {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String
+  status    Status   @default(pending)
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+}

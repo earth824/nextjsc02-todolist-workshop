@@ -1,11 +1,13 @@
+import { countTodosByStatus } from '@/libs/data';
 import SummararyCard from './summary-card';
 
-export default function StatusSummary() {
+export default async function StatusSummary() {
+  const { completed, pending } = await countTodosByStatus();
   return (
     <>
-      <SummararyCard title="Total" amount={10} />
-      <SummararyCard title="Completed" amount={6} />
-      <SummararyCard title="Pending" amount={4} />
+      <SummararyCard title="Total" amount={completed + pending} />
+      <SummararyCard title="Completed" amount={completed} />
+      <SummararyCard title="Pending" amount={pending} />
     </>
   );
 }
