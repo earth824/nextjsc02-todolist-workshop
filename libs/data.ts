@@ -1,8 +1,12 @@
 import prisma from './prisma';
-import { Status } from '@/prisma/generated/prisma';
+import { Status, Todo } from '@/prisma/generated/prisma';
 
-export async function fetchLatestTodos(query?: { limit?: number }) {
+export async function fetchLatestTodos(query?: {
+  limit?: number;
+  search?: string;
+}) {
   const todos = await prisma.todo.findMany({
+    where: { title: { contains: query?.search, mode: 'insensitive' } },
     take: query?.limit,
     orderBy: { createdAt: 'desc' }
   });
@@ -28,4 +32,8 @@ export async function countTodosByStatus() {
   });
   // { completed: 3, pending: 5 }
   return result;
+}
+
+export async function fecthTodoById(id: string): Promise<Todo | null> {
+  return prisma.todo.findUnique({ where: { id } });
 }

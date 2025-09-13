@@ -1,6 +1,13 @@
+import { Status } from '@/prisma/generated/prisma';
 import Link from 'next/link';
 
-export default function EditTodoForm() {
+type EditTodoFormProps = {
+  id: string;
+  title: string;
+  status: Status;
+};
+
+export default function EditTodoForm({ title, status, id }: EditTodoFormProps) {
   return (
     <form className="grid gap-6">
       <div>
@@ -8,19 +15,29 @@ export default function EditTodoForm() {
           type="text"
           className="border border-gray-300 rounded-lg px-3 py-1.5 outline-none w-full"
           placeholder="Enter todo title"
+          defaultValue={title}
         />
       </div>
       <div className="flex gap-4">
         <div>
-          <input type="radio" id="pending" value="Pending" className="mr-1" />
+          <input
+            name="status"
+            type="radio"
+            id="pending"
+            value="pending"
+            className="mr-1"
+            defaultChecked={status === 'pending'}
+          />
           <label htmlFor="pending">Pending</label>
         </div>
         <div>
           <input
+            name="status"
             type="radio"
             id="completed"
-            value="Completed"
+            value="completed"
             className="mr-1"
+            defaultChecked={status === 'completed'}
           />
           <label htmlFor="completed">Completed</label>
         </div>
