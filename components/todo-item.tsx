@@ -1,6 +1,7 @@
 import { cn, convertFirstLetterToUpperCase } from '@/libs/utils';
-import { SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
 import Link from 'next/link';
+import DeleteTodo from './delete.todo';
 
 type TodoItemProps = {
   id: string;
@@ -42,9 +43,7 @@ export default function TodoItem({
             </div>
 
             <div className="p-2">
-              <button className="px-3 py-2 rounded-md border border-gray-200 text-red-500">
-                <Trash2 />
-              </button>
+              <DeleteTodo id={id} />
             </div>
           </>
         )}
