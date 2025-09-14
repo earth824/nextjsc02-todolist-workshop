@@ -39,9 +39,40 @@ export async function createTodo(input: TodoInput): Promise<ApiResponse> {
     }
 
     await prisma.todo.create({ data });
-    redirect('/todo');
     // return { success: true, message: 'Created new todo successfully' };
+  } catch (error) {
+    // if (isRedirectError(error)) throw error;
+    return { success: false, message: 'Unexpected error occured' };
+  }
+  redirect('/todo');
+}
+
+export async function updateTodo(
+  id: string,
+  input: Partial<TodoInput>
+): Promise<ApiResponse> {
+  try {
+    const { success, data, error } = todoInputSchema.safeParse(input);
+    if (!success) {
+      return {
+        success: false,
+        message: 'Validation error',
+        details: z.flattenError(error)
+      };
+    }
+
+    const todo = await fecthTodoById(id);
+    if (!todo)
+      return {
+        success: false,
+        message: `Todo with this id: ${id} was not found`
+        // status: StatusCode.NOT_FOUND
+        // errorCode: ErrorCode.ITEM_NOT_FOUND
+      };
+
+    await prisma.todo.update({ where: { id }, data });
   } catch (error) {
     return { success: false, message: 'Unexpected error occured' };
   }
+  redirect('/todo');
 }
